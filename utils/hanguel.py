@@ -272,13 +272,46 @@ def join_jamos(s, ignore_err=True):
         new_string += flush()
     return new_string
 
-def morphemeToSentence(text):
+def morphemeToSentence(text) -> str:
     '''
-    morpheme tokens to normal sentence
+    convert morpheme sentence to normal sentence
+    Arguments:
+        text (str): A string (the sentence is compose to morphemes).
+    Returns:
+        A string
+    Example:
+        >>> morphemeToSentence("철수는 허리가 꼿꼿하ㄴ 편이다.")
+        "철수는 허리가 꼿꼿한 편이다."
     '''
     split_text = split_syllables(text)
     res = join_jamos(split_text)
     return res
 
-# if __name__=='__main__':
-#     print(morphemeToSentence('철수는 허리가 꼿꼿하ㄴ 편이다.'))
+def preprocess_morpheme_sentence(s):
+    '''
+    remove the token separator(' ') and convert space indicator('__') to space(' ')
+    Arguments:
+        s (str): A string.
+    Returns:
+        A string
+    Example:
+        >>> preprocess_morpheme_sentence("철수 는 __ 허리 가 __ 꼿꼿 하 ㄴ __ 편 이 다 .")
+        "철수는 허리가 꼿꼿하ㄴ 편이다."
+    '''
+    s = s.replace(' ','')
+    s = s.replace('__', ' ')
+    return s
+
+def make_normal(s):
+    '''
+    convert special sentence for DB to normal sentence.
+    Arguments:
+        s (str): A string.
+    Returns:
+        A string
+    Example:
+        >>> make_normal('철수 는 __ 허리 가 __ 꼿꼿 하 ㄴ __ 편 이 다 .')
+        "철수는 허리가 꼿꼿한 편이다."
+    '''
+    tmp = preprocess_morpheme_sentence(s)
+    return morphemeToSentence(tmp)
