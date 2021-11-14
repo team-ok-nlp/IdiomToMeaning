@@ -1,10 +1,15 @@
 '''
 from : https://github.com/kaniblu/hangul-utils/blob/master/hangul_utils/unicode.py
+
+TeamOK make the last 3 functions.
 '''
 
 __all__ = [ "split_syllable_char", "split_syllables",
            "join_jamos", "join_jamos_char",
-           "CHAR_INITIALS", "CHAR_MEDIALS", "CHAR_FINALS"]
+           "CHAR_INITIALS", "CHAR_MEDIALS", "CHAR_FINALS",
+           "make_normal", "morphemeToSentence", "preprocess_morpheme_sentence"]
+
+
 
 import itertools
 import time
