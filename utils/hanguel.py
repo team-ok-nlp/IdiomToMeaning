@@ -320,3 +320,54 @@ def make_normal(s):
     '''
     tmp = preprocess_morpheme_sentence(s)
     return morphemeToSentence(tmp)
+
+def levenshteinDistance(s1, s2):
+    '''
+    두 문자열 간의 편집거리 반환
+    Arguments:
+        s1 (str)
+        s2 (str)
+    Return:
+        편집거리 (int)
+    '''
+    if len(s1) > len(s2):
+        s1, s2 = s2, s1
+
+    distances = range(len(s1) + 1)
+    for i2, c2 in enumerate(s2):
+        distances_ = [i2+1]
+        for i1, c1 in enumerate(s1):
+            if c1 == c2:
+                distances_.append(distances[i1])
+            else:
+                distances_.append(1 + min((distances[i1], distances[i1 + 1], distances_[-1])))
+        distances = distances_
+    return distances[-1]
+
+if __name__ =="__main__":
+
+    s = "철수는 나이에 비하여 젊은 편이다."
+    '''
+    A: 관용구 의미 앞에 붙을 
+    ~ ABC ~
+    앞 뒤에서 뒤에 ㄴ, ㄹ 중 하나의 경우
+    ㄴ 경우
+    1) 앞 단어가 받침이 없으면 -> 바로 앞 단어와 붙임
+        - ex) 하ㄴ -> 한
+    2) 앞 단어가 받침이 있으면 -> "ㄴ" 을 "은"으로 교체
+        - ex) 젊ㄴ -> 젊은
+
+    ㄹ 경우
+    1) 앞 단어가 받침이 없으면 -> 바로 앞 단어와 붙임
+        - ex) 오르ㄹ -> 오를
+    1) 앞 단어가 받침이 있으면 -> "ㄹ" 을 "을"으로 교체
+        - ex) 산ㄹ -> 산을
+
+    앞에서 ㄴ, ㄹ 인 경우
+
+
+    앞 뒤 둘다 ㄴ, ㄹ 인 경우
+
+    '''
+    # 꼿꼿 하 ㄴ
+    # print(morphemeToSentence(s))

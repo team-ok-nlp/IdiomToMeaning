@@ -1,6 +1,40 @@
 # IdiomToMeaning
+
+## Explanation
+
 * Idiom Machine Translation Using Prompt learning 
 * gpt3의 prompt learning을 활용한 관용구 기계 번역
+    - GPT3를 활용한 VQA 논문을 보고 착안하였습니다. 
+* gpt3 가 지속 사용에 있어서 제한이 있어서 huggingface의 번역 모델을 사용할 수 있는 모드도 만들었습니다.
+* 예제
+    - 원문장 : 어려운 집안 사정으로 **가방끈이 짧았**던 아버지는 자식만큼은 대학에 보내려고 무진장 애를 쓰셨다.
+    - 원문장을 번역한 문장 : The father, who **had a short bag strap** due to difficult family circumstances, struggled to send his child to college.
+    - 관용구 풀이 문장 : 어려운 집안 사정으로 **많이 배우지 못하아 학력이 낮 았**던 아버지는 자식만큼은 대학에 보내려고 무진장 애를 쓰셨다.
+    - 관용구 풀이 문장을 gpt3로 번역한 문장 : His father, who **had been unable to get a good education** because of the difficult circumstances at home, had been determined to send his son to college, come what may.
+    - "가방끈이 짧다"라는 관용구는 "많이 배우지 못하여 학력이 낮다"는 의미로 번역 문장 중 itm 번역문장은 이를 반영했으나 원문장 번역 문장은 속뜻이 아니라 말그대로 반영했습니다.
+
+## How to use
+
+### 1.  gpt3를 사용할 경우 openai에서 gpt3 api key를 받아와서 사용한다.
+
+```python
+openai_api_key = "sk-ENTERYOURSECRETKEY"
+it = Idiom_Translator(openai_api_key=openai_api_key)
+print(it.translate("어려운 집안 사정으로 가방끈이 짧았던 아버지는 자식만큼은 대학에 보내려고 무진장 애를 쓰셨다."))
+
+>>> His father, who had been unable to get a good education because of the difficult circumstances at home, had been determined to send his son to college, come what may.
+```
+
+### 2. huggingface의 번역 모델을 사용하는 경우는 open ai api key를 사용하지 않아도 된다.
+
+```python
+device = 'cpu' # gpu 있으면 더 빠름
+it = Idiom_Translator(device=device)
+print(it.translate("어려운 집안 사정으로 가방끈이 짧았던 아버지는 자식만큼은 대학에 보내려고 무진장 애를 쓰셨다."))
+
+>>> My father, who was low in school, had a hard time sending his children to college.
+```
+
 
 ## Preprocessing
 
