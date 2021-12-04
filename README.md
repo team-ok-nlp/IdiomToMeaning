@@ -28,7 +28,7 @@ print(it.translate("어려운 집안 사정으로 가방끈이 짧았던 아버�
 ### 2. huggingface의 번역 모델을 사용하는 경우는 open ai api key를 사용하지 않아도 된다.
 
 ```python
-device = 'cpu' # gpu 있으면 더 빠름
+device = '-1' # gpu번호, -1은 cpu, gpu 있으면 더 빠름
 it = Idiom_Translator(device=device)
 print(it.translate("어려운 집안 사정으로 가방끈이 짧았던 아버지는 자식만큼은 대학에 보내려고 무진장 애를 쓰셨다."))
 
