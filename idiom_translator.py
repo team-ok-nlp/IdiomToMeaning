@@ -5,7 +5,7 @@ import MeCab
 import time
 import openai
 from api import GPT, Example
-
+import torch
 
 class Idiom_Translator(object):
 
@@ -18,17 +18,18 @@ class Idiom_Translator(object):
         self.mecab = MeCab.Tagger()
         self.gpt = None
         self.device = device
+        self.setDevice()
         if openai_api_key is not None:
             self.setGPT3()
         else:
-            self.setDevice()
             self.setMarainMTModel()
 
     def setDevice(self):
-        import torch
         # set gpu device
-        self.device = torch.device(f'cuda:{self.device}' if int(self.device) > -1 and torch.cuda.is_available() else 'cpu')
-        torch.cuda.set_device(self.device)
+        self.device = f'cuda:{self.device}' if int(self.device) > -1 and torch.cuda.is_available() else 'cpu'
+        if torch.cuda.is_available():
+            torch.cuda.set_device(self.device)
+        print(f'self.device : {self.device}')
 
     def make_rules(self):
         idioms = pd.read_csv(self.data_path, encoding='utf-8')
@@ -233,22 +234,6 @@ class Idiom_Translator(object):
                 output = output[8:]
             output = output.replace('\n','')
         else: # hf's NMT model
-            translated = self.nmt.generate(**self.nmt_tokenizer(f'>>eng<< {itm_sentence}', return_tensors="pt", padding=True))
+            translated = self.nmt.generate(**self.nmt_tokenizer(f'>>eng<< {itm_sentence}', return_tensors="pt", padding=True).to(self.device))
             output = self.nmt_tokenizer.decode(translated[0], skip_special_tokens=True)
         return output
-        
-
-
-
-
-
-# s = time.time()
-# target_sent = "그의 뻔뻔스러운 태도에 할 말을 잊고 기가 찼다."
-# tokenized = tokenize(target_sent, spacing_tkn=' ')
-# # 공백으로 토큰을 이어 붙인다.
-# tokenized = ' '.join(tokenized)
-# re_totals = re.findall(total_rules, tokenized)
-# print('\noriginal : {target_sent}\nresult\n',idiomToMeaning(target_sent, re_totals))
-# print(idiomToMeaning('그의 뻔뻔스러운 태도에 놀랍거나 어처구니없는 일을 당하여 기가 막히고 기가 찼다.'))
-
-# print(time.time()-s)

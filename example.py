@@ -1,17 +1,23 @@
 from idiom_translator import Idiom_Translator
-
+import time
 
 if __name__=="__main__":
+
+    sentence = "어려운 집안 사정으로 가방끈이 짧았던 아버지는 자식만큼은 대학에 보내려고 무진장 애를 쓰셨다."
     
     # nmt를 gpt3로 사용하는 경우
     openai_api_key = "sk-ENTERYOURSECRETKEY" # key 받아서 교체할 것.
     it = Idiom_Translator(openai_api_key=openai_api_key)
-    print(it.translate("어려운 집안 사정으로 가방끈이 짧았던 아버지는 자식만큼은 대학에 보내려고 무진장 애를 쓰셨다."))
+    print(it.translate(sentence))
     
     # nmt를 hf model 사용하는 경우
-    device = 'cpu' # gpu 있으면 더 빠름
+    # gpu가 없을 시 미입력 혹은 -1 부여
+    device = 0
+    # gpu 있으면 더 빠름
     it = Idiom_Translator(device=device)
-    print(it.translate("어려운 집안 사정으로 가방끈이 짧았던 아버지는 자식만큼은 대학에 보내려고 무진장 애를 쓰셨다."))
+    start= time.time()
+    print(it.translate(sentence))
+    print(f'time : {(time.time() - start)/60}')
     
     
     '''
