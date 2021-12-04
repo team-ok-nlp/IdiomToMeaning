@@ -9,7 +9,7 @@ from api import GPT, Example
 
 class Idiom_Translator(object):
 
-    def __init__(self, openai_api_key=None, data_path='data/tokenized_idiom.csv', device='cpu') -> None:
+    def __init__(self, openai_api_key=None, data_path='data/tokenized_idiom.csv', device=-1) -> None:
         self.data_path = data_path
         self.openai_api_key = openai_api_key
         self.total_rules = ''
@@ -21,7 +21,14 @@ class Idiom_Translator(object):
         if openai_api_key is not None:
             self.setGPT3()
         else:
+            self.setDevice()
             self.setMarainMTModel()
+
+    def setDevice(self):
+        import torch
+        # set gpu device
+        self.device = torch.device(f'cuda:{self.device}' if int(self.device) > -1 and torch.cuda.is_available() else 'cpu')
+        torch.cuda.set_device(self.device)
 
     def make_rules(self):
         idioms = pd.read_csv(self.data_path, encoding='utf-8')
